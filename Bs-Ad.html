@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Date Converter - Samir Dahit</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: radial-gradient(circle at center, #020c1b 0%, #000000 100%);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Tech Cyber Grid Background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.04) 1px, transparent 1px);
+            background-size: 25px 25px;
+            z-index: -1;
+        }
+
+        .container {
+            background: rgba(10, 25, 47, 0.9);
+            border: 2px solid #00f2ff;
+            padding: 35px 25px;
+            border-radius: 25px;
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.4), inset 0 0 15px rgba(0, 242, 255, 0.1);
+            width: 100%;
+            max-width: 470px;
+            text-align: center;
+            position: relative;
+        }
+
+        .container::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 5px;
+            background: linear-gradient(90deg, #ff007f, #00f2ff, #ffdd57);
+        }
+
+        .header-title {
+            font-size: 26px;
+            font-weight: 900;
+            color: #00f2ff;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(0, 242, 255, 0.7);
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+
+        /* VIP Custom Tabs */
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            padding: 6px;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: transparent;
+            color: #a8b2d1;
+            font-weight: 800;
+            cursor: pointer;
+            border-radius: 9px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #00f2ff, #0066ff);
+            color: #020c1b;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 15px;
+            font-weight: 900;
+            color: #ff007f;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .inputs-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .input-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .input-box span {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #8892b0;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 5px;
+            background: #020c1b;
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 900;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #00f2ff;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        /* Remove Arrows */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        button.convert-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00f2ff, #0066ff);
+            border: none;
+            border-radius: 12px;
+            color: #020c1b;
+            font-size: 18px;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 242, 255, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        button.convert-btn:hover {
+            background: linear-gradient(135deg, #00ebb5, #00f2ff);
+            box-shadow: 0 5px 25px rgba(0, 242, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* VIP Result Card */
+        .result-card {
+            margin-top: 35px;
+            padding: 22px;
+            background: rgba(2, 12, 27, 0.9);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-left: 6px solid #ff007f;
+            text-align: left;
+            display: none;
+        }
+
+        .result-card h4 {
+            color: #00f2ff;
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            padding-bottom: 5px;
+        }
+
+        .result-line {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #cbd5e1;
+        }
+
+        .highlight-blue {
+            color: #00f2ff;
+            font-weight: 900;
+            text-shadow: 0 0 5px rgba(0, 242, 255, 0.3);
+        }
+
+        .highlight-yellow {
+            color: #ffdd57;
+            font-weight: 900;
+            text-shadow: 0 0 5px rgba(255, 221, 87, 0.4);
+        }
+
+        /* Glowing VIP Credit */
+        .vip-credit {
+            margin-top: 35px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: 900;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+            border: 1px dashed #00f2ff;
+        }
+
+        .vip-credit span {
+            color: #ffdd57;
+            text-shadow: 0 0 8px rgba(255, 221, 87, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-title">VIP Date Converter</div>
+    
+    <div class="tabs">
+        <button id="btnBS" class="tab-btn active" onclick="switchMode('BS')">Nepali to English</button>
+        <button id="btnAD" class="tab-btn" onclick="switchMode('AD')">English to Nepali</button>
+    </div>
+
+    <div id="sectionBS" class="form-section active">
+        <label>कृपया तपाइँको नेपाली जन्ममिति (BS) प्रविष्ट गर्नुहोस्:</label>
+        <div class="inputs-row">
+            <div class="input-box">
+                <input type="number" id="bsYear" placeholder="२०६३" value="2063">
+                <span>साल</span>
+            </div>
+            <div class="input-box">
+                <input type="number" id="bsMonth" placeholder="१" value="1">
+                <span>महिना</span>
+            </div>
+            <div class="input-box">
+                <input type="number" id="bsDay" placeholder="१" value="1">
+                <span>गते</span>
+            </div>
+        </div>
+        <button class="convert-btn" onclick="processConversion('BS')">विवरण जाँच गर्नुहोस्</button>
+    </div>
+
+    <div id="sectionAD" class="form-section">
+        <label>Enter English Date of Birth (AD):</label>
+        <div class="inputs-row">
+            <div class="input-box">
+                <input type="number" id="adYear" placeholder="2006" value="2006">
+                <span>Year</span>
+            </div>
+            <div class="input-box">
+                <input type="number" id="adMonth" placeholder="4" value="4">
+                <span>Month</span>
+            </div>
+            <div class="input-box">
+                <input type="number" id="adDay" placeholder="14" value="14">
+                <span>Day</span>
+            </div>
+        </div>
+        <button class="convert-btn" onclick="processConversion('AD')">Check Details</button>
+    </div>
+
+    <div class="result-card" id="resultCard">
+        <h4>नतिजा (Results):</h4>
+        <div class="result-line">🇳🇵 नेपाली जन्ममिति (BS): <span id="resNepali" class="highlight-blue"></span></div>
+        <div class="result-line">📅 English Date (AD): <span id="resEnglish" class="highlight-yellow"></span></div>
+        <div class="result-line">⏳ कुल उमेर (Total Age): <span id="resAge" class="highlight-yellow"></span></div>
+    </div>
+
+    <div class="vip-credit">
+        Calculator created by: <span>Samir Dahit</span>
+    </div>
+</div>
+
+<script>
+    const bsToAdMap = {
+        2060: { year: 2003, month: 4, day: 14 },
+        2061: { year: 2004, month: 4, day: 13 },
+        2062: { year: 2005, month: 4, day: 14 },
+        2063: { year: 2006, month: 4, day: 14 },
+        2064: { year: 2007, month: 4, day: 14 },
+        2065: { year: 2008, month: 4, day: 13 },
+        2066: { year: 2009, month: 4, day: 14 },
+        2067: { year: 2010, month: 4, day: 14 },
+        2068: { year: 2011, month: 4, day: 14 },
+        2069: { year: 2012, month: 4, day: 13 },
+        2070: { year: 2013, month: 4, day: 14 },
+        2071: { year: 2014, month: 4, day: 14 },
+        2072: { year: 2015, month: 4, day: 14 },
+        2073: { year: 2016, month: 4, day: 13 },
+        2074: { year: 2017, month: 4, day: 14 },
+        2075: { year: 2018, month: 4, day: 14 },
+        2076: { year: 2019, month: 4, day: 14 },
+        2077: { year: 2020, month: 4, day: 13 },
+        2078: { year: 2021, month: 4, day: 14 },
+        2079: { year: 2022, month: 4, day: 14 },
+        2080: { year: 2023, month: 4, day: 14 }
+    };
+
+    const nepaliMonths = ["बैशाख", "जेठ", "असार", "साउन", "भदौ", "असोज", "कात्तिक", "मंसिर", "पुस", "माघ", "फागुन", "चैत"];
+    const nepaliMonthDays = [31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30];
+
+    function switchMode(mode) {
+        document.getElementById('resultCard').style.display = 'none';
+        if (mode === 'BS') {
+            document.getElementById('btnBS').classList.add('active');
+            document.getElementById('btnAD').classList.remove('active');
+            document.getElementById('sectionBS').classList.add('active');
+            document.getElementById('sectionAD').classList.remove('active');
+        } else {
+            document.getElementById('btnAD').classList.add('active');
+            document.getElementById('btnBS').classList.remove('active');
+            document.getElementById('sectionAD').classList.add('active');
+            document.getElementById('sectionBS').classList.remove('active');
+        }
+    }
+
+    function processConversion(type) {
+        let finalEnglishDate;
+        let finalNepaliText;
+
+        if (type === 'BS') {
+            const yy = parseInt(document.getElementById('bsYear').value);
+            const mm = parseInt(document.getElementById('bsMonth').value);
+            const dd = parseInt(document.getElementById('bsDay').value);
+
+            if (!yy || !mm || !dd || mm < 1 || mm > 12 || dd < 1 || dd > 32) {
+                alert("कृपया सही नेपाली मिति हाल्नुहोस्।");
+                return;
+            }
+
+            let base = bsToAdMap[yy] || { year: yy - 57, month: 4, day: 14 };
+            let totalDays = 0;
+            for (let i = 0; i < mm - 1; i++) {
+                totalDays += nepaliMonthDays[i];
+            }
+            totalDays += (dd - 1);
+
+            let calculatedDate = new Date(base.year, base.month - 1, base.day);
+            calculatedDate.setDate(calculatedDate.getDate() + totalDays);
+
+            finalEnglishDate = calculatedDate;
+            finalNepaliText = `${nepaliMonths[mm - 1]} ${dd}, ${yy}`;
+        } else {
+            const yy = parseInt(document.getElementById('adYear').value);
+            const mm = parseInt(document.getElementById('adMonth').value);
+            const dd = parseInt(document.getElementById('adDay').value);
+
+            if (!yy || !mm || !dd || mm < 1 || mm > 12 || dd < 1 || dd > 31) {
+                alert("Please enter a valid English date.");
+                return;
+            }
+
+            finalEnglishDate = new Date(yy, mm - 1, dd);
+
+            let nYear = yy + 56;
+            let nMonth = mm + 8;
+            let nDay = dd + 17;
+
+            if (nDay > 30) { nDay -= 30; nMonth++; }
+            if (nMonth > 12) { nMonth -= 12; nYear++; }
+
+            finalNepaliText = `${nepaliMonths[nMonth - 1]} ${nDay}, ${nYear}`;
+        }
+
+        const today = new Date();
+        let ageYears = today.getFullYear() - finalEnglishDate.getFullYear();
+        let ageMonths = today.getMonth() - finalEnglishDate.getMonth();
+        let ageDays = today.getDate() - finalEnglishDate.getDate();
+
+        if (ageDays < 0) {
+            ageMonths--;
+            ageDays += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+        }
+        if (ageMonths < 0) {
+            ageYears--;
+            ageMonths += 12;
+        }
+
+        document.getElementById('resNepali').innerText = finalNepaliText;
+        const fmtOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('resEnglish').innerText = finalEnglishDate.toLocaleDateString('en-US', fmtOptions);
+        document.getElementById('resAge').innerText = `${ageYears} वर्ष, ${ageMonths} महिना, र ${ageDays} दिन`;
+
+        document.getElementById('resultCard').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
